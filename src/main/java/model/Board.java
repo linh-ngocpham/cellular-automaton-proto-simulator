@@ -50,8 +50,8 @@ public interface Board<S> {
 
 
 
-  List<Item> itemList();
 
-  Item getItemByPosition(Position position);
-  Box getBoxByPosition(Position position);
+
+
+  Immovable getBoxByPosition(Position position);
 }
