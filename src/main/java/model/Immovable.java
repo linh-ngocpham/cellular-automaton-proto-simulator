@@ -1,8 +1,9 @@
 package model;
 
 import util.Position;
+import view.FirefighterGrid;
 
 public interface Immovable {
     Position position();
-    void paint();
+    void paint(FirefighterGrid grid);
 }

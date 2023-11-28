@@ -5,22 +5,37 @@ import util.Position;
 import java.util.*;
 
 
-public class FirefighterBoard implements Board<List<ModelElement>> {
+public class FirefighterBoard implements Board {
   private final int columnCount;
   private final int rowCount;
   private final int initialFireCount;
   private final int initialFirefighterCount;
-  private List<Position> firefighterPositions;
-  private Set<Position> firePositions;
+  private final int initialCloudCount;
+  private final int initialMountainCount;
+  private final int initialRoadCount;
+  private final int initialRockCount;
+  private List<Item> itemList;
+  private List<Immovable> boxList;
+
+
   private int step = 0;
   private final Random randomGenerator = new Random();
 
-  public FirefighterBoard(int columnCount, int rowCount, int initialFireCount, int initialFirefighterCount) {
+  public FirefighterBoard(int columnCount, int rowCount, int initialFireCount, int initialFirefighterCount, int initialCloudCount, int initialMotorFirefighterCount,
+                          int initialMountainCount, int initialRoadCount, int initialRockCount) {
     this.columnCount = columnCount;
     this.rowCount = rowCount;
+    this.itemList = new ArrayList<>();
+    this.immovableList = new ArrayList<>();
+
     this.initialFireCount = initialFireCount;
     this.initialFirefighterCount = initialFirefighterCount;
-    initializeElements();
+    this.initialMountainCount = initialMountainCount;
+    this.initialRoadCount = initialRoadCount;
+    this.initialRockCount = initialRockCount;
+    initializeImmovable();
+
+
   }
 
   public void initializeElements() {

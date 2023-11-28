@@ -11,21 +11,6 @@ import java.util.List;
  */
 public interface Board<S> {
 
-  /**
-   * Get the state of the board at a specific position.
-   *
-   * @param position The position on the board for which to retrieve the state.
-   * @return The state at the specified position.
-   */
-  S getState(Position position);
-
-  /**
-   * Set the state of a specific position on the board to the specified state.
-   *
-   * @param state The state to set for the given position.
-   * @param position The position on the board for which to set the state.
-   */
-  void setState(S state, Position position);
 
   /**
    * Get the number of rows in the board.
@@ -61,5 +46,12 @@ public interface Board<S> {
    * @return The current step number or generation.
    */
   int stepNumber();
-}
 
+
+
+
+  List<Item> itemList();
+
+  Item getItemByPosition(Position position);
+  Box getBoxByPosition(Position position);
+}

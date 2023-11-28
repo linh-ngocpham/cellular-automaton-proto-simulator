@@ -1,8 +1,12 @@
 package view;
 
 import javafx.util.Pair;
+import model.Item;
 import util.Position;
+import model.Board;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,22 +14,9 @@ import java.util.List;
  *
  * @param <E> The type of elements stored in the grid.
  */
-public interface Grid<E> {
+public interface Grid {
 
-  /**
-   * Repaint the grid with a list of elements, each associated with their respective positions.
-   *
-   * @param elements A list of pairs, each containing a position and the element to be displayed at that position.
-   */
-  void repaint(List<Pair<Position, E>> elements);
-
-  /**
-   * Repaint the grid with a two-dimensional array of elements. The array's dimensions should match
-   * the row and column count of the grid.
-   *
-   * @param elements A two-dimensional array of elements to be displayed on the grid.
-   */
-  void repaint(E[][] elements);
+  void repaint(List<Item> itemList, List<Position> clearList, Board board);
 
   /**
    * Set the dimensions of the grid to the specified number of columns, number of rows, square width,
@@ -51,5 +42,6 @@ public interface Grid<E> {
    * @return The number of rows in the grid.
    */
   int rowCount();
-}
 
+  void initialize(Board board);
+}

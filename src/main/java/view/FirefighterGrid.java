@@ -2,57 +2,66 @@ package view;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
-import javafx.util.Pair;
+import model.Board;
+import model.Box;
+import model.Fire;
+import model.Immovable;
+import model.Item;
 import util.Position;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class FirefighterGrid extends Canvas implements Grid<ViewElement>{
-
-    private void paintElementAtPosition(ViewElement element, Position position) {
-        paintBox(position.row(), position.column(), element.color);
-    }
-    private int boxWidth;
-    private int boxHeight;
+public class FirefighterGrid extends Canvas implements Grid{
+    private int squareWidth;
+    private int squareHeight;
     private int columnCount;
     private int rowCount;
 
-    @Override
-    public void repaint(List<Pair<Position, ViewElement>> positionedElements) {
-        clear(positionedElements);
-        paint(positionedElements);
+    public void repaint(List<Item> itemList, List<Position> clearList, Board board) {
+        clear(clearList, board);
+        paintItems(itemList);
         paintLines();
     }
 
-    private void clear(List<Pair<Position, ViewElement>> positionedElements) {
-        for (Pair<Position, ViewElement> positionElement : positionedElements) {
-            Position position = positionElement.getKey();
-            clearBox(position.row(), position.column());
-        }
-    }
-
-    private void paint(List<Pair<Position, ViewElement>> positionedElements) {
-        for(Pair<Position, ViewElement> pair : positionedElements){
-            paintElementAtPosition(pair.getValue(), pair.getKey());
-        }
-    }
-
-    @Override
-    public void repaint(ViewElement[][] elements) {
-        clear();
-        paint(elements);
-        paintLines();
-    }
-
-    private void clear() {
-        getGraphicsContext2D().clearRect(0,0,getWidth(), getHeight());
-    }
-
-    private void paint(ViewElement[][] elements) {
-        for(int column = 0; column < columnCount; column++)
-            for(int row = 0; row < rowCount; row++){
-                paintElementAtPosition(elements[row][column], new Position(row, column));
+    private void clear(List<Position> positions, Board board) {
+        Immovable immovable;
+        for (Position position : positions) {
+            clearSquare(position.row(), position.column());
+            immovable = board.getBoxByPosition(position);
+            if (immovable != null){
+                immovable.paint(this);
+            }else {
+                paintSquare(position.row(), position.column(), Color.WHITE);
             }
+        }
+    }
+
+    private void paintItems(List<Item> itemList) {
+        for (Item item : itemList) {
+            item.paint(this);
+        }
+    }
+
+    private void paintBox(Board board){
+        Immovable immovable;
+        for (int row = 0; row < rowCount; row++){
+            for (int column = 0; column < columnCount; column++){
+                immovable = board.getBoxByPosition(new Position(row, column));
+                if (immovable != null){
+                    immovable.paint(this);
+                }else {
+                    paintSquare(row, column, Color.WHITE);
+                }
+            }
+        }
+    }
+
+    public void initialize(Board board) {
+        paintBox(board);
+        paintLines();
+        paintItems(board.itemList());
     }
 
     public int columnCount() {
@@ -64,13 +73,14 @@ public class FirefighterGrid extends Canvas implements Grid<ViewElement>{
     }
 
     @Override
-    public void setDimensions(int columnCount, int rowCount, int boxWidth, int boxHeight) {
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
+    public void setDimensions(int columnCount, int rowCount, int squareWidth, int squareHeight) {
+        this.squareWidth = squareWidth;
+        this.squareHeight = squareHeight;
         this.columnCount = columnCount;
         this.rowCount = rowCount;
-        super.setWidth(boxWidth * columnCount);
-        super.setHeight(boxHeight * rowCount);
+        super.setWidth(squareWidth*columnCount);
+        super.setHeight(squareHeight*rowCount);
+
     }
 
     private void paintLines(){
@@ -80,20 +90,32 @@ public class FirefighterGrid extends Canvas implements Grid<ViewElement>{
 
     private void paintVerticalLines() {
         for(int column = 0; column < columnCount; column++)
-            getGraphicsContext2D().strokeLine(column * boxWidth, 0,column * boxWidth, getHeight());
+            getGraphicsContext2D().strokeLine(column*squareWidth, 0,column*squareWidth, getHeight());
     }
 
     private void paintHorizontalLines() {
         for(int row = 0; row < rowCount; row++)
-            getGraphicsContext2D().strokeLine(0, row * boxHeight, getWidth(), row * boxHeight);
+            getGraphicsContext2D().strokeLine(0, row*squareHeight, getWidth(), row*squareHeight);
     }
 
-    private void paintBox(int row, int column, Color color){
+    public void paintSquare(int row, int column, Color color){
         getGraphicsContext2D().setFill(color);
-        getGraphicsContext2D().fillRect(column * boxWidth,row * boxHeight, boxWidth, boxHeight);
+        getGraphicsContext2D().fillRect(column*squareWidth,row*squareHeight, squareWidth, squareHeight);
     }
 
-    private void clearBox(int row, int column){
-        getGraphicsContext2D().clearRect(column * boxWidth,row * boxHeight, boxWidth, boxHeight);
+    public void paintTriangle(int row, int column, Color color){
+        getGraphicsContext2D().setFill(color);
+        getGraphicsContext2D().fillPolygon(new double[]{column*squareWidth , column*squareWidth + squareWidth/2, (column+1)*squareWidth},
+                new double[]{(row+1)*squareHeight , row*squareHeight, (row+1)*squareHeight},
+                3);
+    }
+
+    public void paintCircle(int row, int column, Color color){
+        getGraphicsContext2D().setFill(color);
+        getGraphicsContext2D().fillOval(column*squareWidth, row*squareHeight, squareHeight, squareWidth);
+    }
+
+    private void clearSquare(int row, int column){
+        getGraphicsContext2D().clearRect(column*squareWidth,row*squareHeight, squareWidth, squareHeight);
     }
 }

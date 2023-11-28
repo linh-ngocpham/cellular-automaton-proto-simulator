@@ -9,3 +9,4 @@ public enum ViewElement {
     this.color = color;
   }
 }
+
