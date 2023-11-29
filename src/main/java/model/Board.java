@@ -47,11 +47,10 @@ public interface Board<S> {
    */
   int stepNumber();
 
+  Immovable getImmovableByPosition(Position position);
 
 
+  Movable getMovableByPosition(Position position);
 
-
-
-
-  Immovable getBoxByPosition(Position position);
+  List<Movable> movableList();
 }

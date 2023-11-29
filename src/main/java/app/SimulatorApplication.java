@@ -20,6 +20,13 @@ public class SimulatorApplication extends javafx.application.Application {
   public static final int INITIAL_FIRE_COUNT = 3;
   public static final int INITIAL_FIREFIGHTER_COUNT = 6;
 
+
+  public static final int INITIAL_MOUNTAINCOUNT = 3;
+
+  public static final int INITIAL_ROAD_COUNT = 1;
+
+  public static final int INITIAL_ROCK_COUNT = 2;
+
   private Stage primaryStage;
   private Parent view;
   private void initializePrimaryStage(Stage primaryStage) {
@@ -44,9 +51,8 @@ public class SimulatorApplication extends javafx.application.Application {
     view = loader.load();
     Controller controller = loader.getController();
     controller.initialize(BOX_WIDTH, BOX_HEIGHT, COLUMN_COUNT, ROW_COUNT,
-            INITIAL_FIRE_COUNT, INITIAL_FIREFIGHTER_COUNT);
+            INITIAL_FIRE_COUNT, INITIAL_MOUNTAINCOUNT, INITIAL_ROAD_COUNT, INITIAL_ROCK_COUNT );
   }
-
   private void showScene() {
     Scene scene = new Scene(view);
     primaryStage.setScene(scene);

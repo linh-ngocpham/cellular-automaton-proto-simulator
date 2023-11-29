@@ -9,45 +9,69 @@ public class FirefighterBoard implements Board {
   private final int columnCount;
   private final int rowCount;
   private final int initialFireCount;
-  private final int initialFirefighterCount;
-
+  //private final int initialFirefighterCount;
   private final int initialMountainCount;
   private final int initialRoadCount;
   private final int initialRockCount;
-
-  private List<Immovable> immovablesList;
-
-
+  private List<Movable> movableList;
+  private List<Immovable> immovableList;
   private int step = 0;
   private final Random randomGenerator = new Random();
 
-  public FirefighterBoard(int columnCount, int rowCount, int initialFireCount, int initialFirefighterCount,
+
+
+  public FirefighterBoard(int columnCount, int rowCount, int initialFireCount,
                           int initialMountainCount, int initialRoadCount, int initialRockCount) {
     this.columnCount = columnCount;
     this.rowCount = rowCount;
 
-    this.immovablesList = new ArrayList<>();
+    this.movableList = new ArrayList<>();
+    this.immovableList = new ArrayList<>();
 
     this.initialFireCount = initialFireCount;
-    this.initialFirefighterCount = initialFirefighterCount;
+    //this.initialFirefighterCount = initialFirefighterCount;
     this.initialMountainCount = initialMountainCount;
     this.initialRoadCount = initialRoadCount;
     this.initialRockCount = initialRockCount;
     initializeImmovable();
-
-
+    initializeMovable();
   }
+
+
   public void initializeImmovable() {
     for (int i = 0; i < initialMountainCount; i++){
-      immovablesList.add(new Mountain(randomEmptyPosition()));
+      immovableList.add(new Mountain(randomEmptyPosition()));
     }
     for (int i = 0; i < initialRoadCount; i++){
-      immovablesList.add(new Road(randomEmptyPosition()));
+      immovableList.add(new Road(randomEmptyPosition()));
     }
     for (int i = 0; i < initialRockCount; i++){
-      immovablesList.add(new Rock(randomEmptyPosition()));
+      immovableList.add(new Rock(randomEmptyPosition()));
     }
   }
+
+  public void initializeMovable() {
+    for (int i = 0; i < initialFireCount; i++) {
+      movableList.add(new Fire(randomEmptyPosition()));
+    }
+  }
+
+
+
+  public Immovable getImmovableByPosition(Position position) {
+    for (Immovable immovable : immovableList) {
+      if (immovable.position().equals(position)) {
+        return immovable;
+      }
+    }
+    return null;
+  }
+
+  public List<Immovable> immovableList()
+  {
+    return immovableList; }
+
+
 
 
 
@@ -58,9 +82,13 @@ public class FirefighterBoard implements Board {
     return new Position(randomGenerator.nextInt(rowCount), randomGenerator.nextInt(columnCount));
   }
 
-
-
-
+  private Position randomEmptyPosition() {
+    Position result;
+    for(;;){
+      result = randomPosition();
+      if (getMovableByPosition(result) == null && getImmovableByPosition(result) == null) return result;
+    }
+  }
 
   @Override
   public int rowCount() {
@@ -73,40 +101,53 @@ public class FirefighterBoard implements Board {
   }
 
   public List<Position> updateToNextGeneration() {
-    List<Position> modifiedPositions = updateFirefighters();
-    modifiedPositions.addAll(updateFires());
+
+    List<Position> result = new ArrayList<Position>();
+    List<Movable> currentMovableList = new ArrayList<Movable>(movableList);
+
+    for (Movable movable: currentMovableList) {
+      if (!(movable instanceof Fire)) result.addAll(movable.update(this));
+    }
+
+    currentMovableList = new ArrayList<Movable>(movableList);
+    if (step % 2 == 1){
+      for (Movable movable: currentMovableList) {
+        if (movable instanceof Fire) result.addAll(movable.update(this));
+      }
+    }
     step++;
-    return modifiedPositions;
+    return result;
   }
-  public List<Immovable> immovablesList() { return immovablesList; }
-  public Immovable getImmovableByPosition(Position position) {
-    for (Immovable immovable : immovablesList) {
-      if (immovable.position().equals(position)) {
-        return immovable;
+
+  public List<Movable> movableList()
+  {
+    return movableList; }
+
+
+  public Movable getMovableByPosition(Position position) {
+    for (Movable movable : movableList) {
+      if (movable.position().equals(position)) {
+        return movable;
       }
     }
     return null;
   }
-
-
-
 
   @Override
   public int stepNumber() {
     return step;
   }
 
-
-
   @Override
   public void reset() {
     step = 0;
-
+    movableList.clear();
+    immovableList.clear();
+    initializeMovable();
+    initializeImmovable();
   }
 
-
-
-  private List<Position> neighbors(Position position) {
+  List<Position> neighbors(Position position) {
     List<Position> list = new ArrayList<>();
     if (position.row() > 0) list.add(new Position(position.row() - 1, position.column()));
     if (position.column() > 0) list.add(new Position(position.row(), position.column() - 1));
@@ -114,9 +155,5 @@ public class FirefighterBoard implements Board {
     if (position.column() < columnCount - 1) list.add(new Position(position.row(), position.column() + 1));
     return list;
   }
-
-
-
-
 
 }

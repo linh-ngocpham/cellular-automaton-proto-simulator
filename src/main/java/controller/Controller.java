@@ -15,6 +15,7 @@ import javafx.util.Pair;
 import model.Board;
 import model.ModelElement;
 import model.FirefighterBoard;
+import model.Movable;
 import util.Position;
 import view.Grid;
 import view.ViewElement;
@@ -38,7 +39,7 @@ public class Controller {
   @FXML
   private ToggleButton playToggleButton;
   @FXML
-  private Grid<ViewElement> grid;
+  private Grid grid;
   private Timeline timeline;
   private Board<List<ModelElement>> board;
 
@@ -59,27 +60,26 @@ public class Controller {
   }
 
   private void updateBoard(){
+
     List<Position> updatedPositions = board.updateToNextGeneration();
-    List<Pair<Position, ViewElement>> updatedSquares = new ArrayList<>();
+    List<Position> updatedClearSquares = new ArrayList<>();
+    List<Movable> updatedSquares = new ArrayList<>();
     for(Position updatedPosition : updatedPositions){
-      List<ModelElement> squareState = board.getState(updatedPosition);
-      ViewElement viewElement = getViewElement(squareState);
-      updatedSquares.add(new Pair<>(updatedPosition, viewElement));
+      Movable squareState = board.getMovableByPosition(updatedPosition);
+      updatedClearSquares.add(updatedPosition);
+      if (squareState != null){
+        updatedSquares.add(squareState);
+      }
     }
-    grid.repaint(updatedSquares);
+    grid.repaint(updatedSquares, updatedClearSquares, board);
     updateGenerationLabel(board.stepNumber());
   }
 
   private void repaintGrid(){
-    int columnCount = board.columnCount();
-    int rowCount = board.rowCount();
-    ViewElement[][] viewElements = new ViewElement[rowCount][columnCount];
-    for(int column = 0; column < columnCount; column++)
-      for(int row = 0; row < rowCount; row++)
-        viewElements[row][column] = getViewElement(board.getState(new Position(row, column)));
-    grid.repaint(viewElements);
+    grid.initialize(board);
     updateGenerationLabel(board.stepNumber());
   }
+
 
   private ViewElement getViewElement(List<ModelElement> squareState) {
     if(squareState.contains(ModelElement.FIREFIGHTER)){
@@ -123,10 +123,12 @@ public class Controller {
     repaintGrid();
   }
 
+
+
   public void initialize(int squareWidth, int squareHeight, int columnCount,
-                                int rowCount, int initialFireCount, int initialFirefighterCount) {
+                                int rowCount, int initialFireCount,  int initialMountainCount, int initialRoadCount, int initialRockCount) {
     grid.setDimensions(columnCount, rowCount, squareWidth, squareHeight);
-    this.setModel(new FirefighterBoard(columnCount, rowCount, initialFireCount, initialFirefighterCount));
+    this.setModel(new FirefighterBoard(columnCount, rowCount, initialFireCount, initialMountainCount, initialRoadCount, initialRockCount));
     repaintGrid();
   }
 

@@ -6,7 +6,7 @@ import view.FirefighterGrid;
 
 public class Rock implements Immovable{
     Position position;
-    Color color = Color.BLUE;
+    Color color = Color.MEDIUMTURQUOISE;
     public Rock(Position position){
         this.position = position;
     }

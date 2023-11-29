@@ -3,10 +3,8 @@ package view;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import model.Board;
-import model.Box;
-import model.Fire;
 import model.Immovable;
-import model.Item;
+import model.Movable;
 import util.Position;
 
 import java.util.ArrayList;
@@ -19,9 +17,9 @@ public class FirefighterGrid extends Canvas implements Grid{
     private int columnCount;
     private int rowCount;
 
-    public void repaint(List<Item> itemList, List<Position> clearList, Board board) {
+    public void repaint(List<Movable> movableList, List<Position> clearList, Board board) {
         clear(clearList, board);
-        paintItems(itemList);
+        paintMovable(movableList);
         paintLines();
     }
 
@@ -29,7 +27,7 @@ public class FirefighterGrid extends Canvas implements Grid{
         Immovable immovable;
         for (Position position : positions) {
             clearSquare(position.row(), position.column());
-            immovable = board.getBoxByPosition(position);
+            immovable = board.getImmovableByPosition(position);
             if (immovable != null){
                 immovable.paint(this);
             }else {
@@ -38,8 +36,8 @@ public class FirefighterGrid extends Canvas implements Grid{
         }
     }
 
-    private void paintItems(List<Item> itemList) {
-        for (Item item : itemList) {
+    private void paintMovable(List<Movable> movableList) {
+        for (Movable item : movableList) {
             item.paint(this);
         }
     }
@@ -48,7 +46,7 @@ public class FirefighterGrid extends Canvas implements Grid{
         Immovable immovable;
         for (int row = 0; row < rowCount; row++){
             for (int column = 0; column < columnCount; column++){
-                immovable = board.getBoxByPosition(new Position(row, column));
+                immovable = board.getImmovableByPosition(new Position(row, column));
                 if (immovable != null){
                     immovable.paint(this);
                 }else {
@@ -61,8 +59,9 @@ public class FirefighterGrid extends Canvas implements Grid{
     public void initialize(Board board) {
         paintBox(board);
         paintLines();
-        paintItems(board.itemList());
+        paintMovable(board.movableList());
     }
+
 
     public int columnCount() {
         return columnCount;
@@ -80,7 +79,6 @@ public class FirefighterGrid extends Canvas implements Grid{
         this.rowCount = rowCount;
         super.setWidth(squareWidth*columnCount);
         super.setHeight(squareHeight*rowCount);
-
     }
 
     private void paintLines(){
@@ -98,17 +96,12 @@ public class FirefighterGrid extends Canvas implements Grid{
             getGraphicsContext2D().strokeLine(0, row*squareHeight, getWidth(), row*squareHeight);
     }
 
+
     public void paintSquare(int row, int column, Color color){
         getGraphicsContext2D().setFill(color);
         getGraphicsContext2D().fillRect(column*squareWidth,row*squareHeight, squareWidth, squareHeight);
     }
 
-    public void paintTriangle(int row, int column, Color color){
-        getGraphicsContext2D().setFill(color);
-        getGraphicsContext2D().fillPolygon(new double[]{column*squareWidth , column*squareWidth + squareWidth/2, (column+1)*squareWidth},
-                new double[]{(row+1)*squareHeight , row*squareHeight, (row+1)*squareHeight},
-                3);
-    }
 
     public void paintCircle(int row, int column, Color color){
         getGraphicsContext2D().setFill(color);

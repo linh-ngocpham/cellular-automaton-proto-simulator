@@ -1,12 +1,10 @@
 package view;
 
 import javafx.util.Pair;
-import model.Item;
+import model.Movable;
 import util.Position;
 import model.Board;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,7 +14,7 @@ import java.util.List;
  */
 public interface Grid {
 
-  void repaint(List<Item> itemList, List<Position> clearList, Board board);
+  void repaint(List<Movable> movableList, List<Position> clearList, Board board);
 
   /**
    * Set the dimensions of the grid to the specified number of columns, number of rows, square width,
@@ -44,4 +42,5 @@ public interface Grid {
   int rowCount();
 
   void initialize(Board board);
+
 }
