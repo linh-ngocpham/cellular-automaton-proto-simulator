@@ -15,10 +15,13 @@ public class FirefighterBoard implements Board {
   private final int initialMountainCount;
   private final int initialRoadCount;
   private final int initialRockCount;
+  private final int initialMotorFirefighterCount;
+
+
   private List<Movable> movableList;
   private List<Immovable> immovableList;
 
-  private List<Position> combinedlistpositions;
+
   private int step = 0;
   private final Random randomGenerator = new Random();
 
@@ -26,7 +29,7 @@ public class FirefighterBoard implements Board {
 
   public FirefighterBoard(int columnCount, int rowCount, int initialFireCount,
                           int initialMountainCount, int initialRoadCount, int initialRockCount,
-                          int initialFirefighterCount, int initialCloudCount) {
+                          int initialFirefighterCount, int initialCloudCount, int initialMotorFirefighterCount) {
     this.columnCount = columnCount;
     this.rowCount = rowCount;
 
@@ -39,6 +42,7 @@ public class FirefighterBoard implements Board {
     this.initialMountainCount = initialMountainCount;
     this.initialRoadCount = initialRoadCount;
     this.initialRockCount = initialRockCount;
+    this.initialMotorFirefighterCount = initialMotorFirefighterCount;
     initializeImmovable();
     initializeMovable();
   }
@@ -66,6 +70,10 @@ public class FirefighterBoard implements Board {
     for (int i = 0; i < initialCloudCount; i++) {
       movableList.add(new Cloud(randomEmptyPosition()));
     }
+    for (int i = 0; i < initialMotorFirefighterCount; i++){
+      movableList.add(new MotorFireFighter(randomEmptyPosition()));
+    }
+
   }
 
 

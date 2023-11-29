@@ -54,16 +54,16 @@ public class Controller {
     pauseToggleButton.setSelected(true);
   }
 
-  /*
+
   private void setModel(FirefighterBoard firefighterBoard) {
     this.board = requireNonNull(firefighterBoard, "firefighter.model is null");
   }
 
-   */
 
-  private void setModel(VirusFightingBoard firefighterBoard) {
+
+  /*private void setModel(VirusFightingBoard firefighterBoard) {
     this.board = requireNonNull(firefighterBoard, "virusfighting.model is null");
-  }
+  }*/
 
   private void updateBoard(){
 
@@ -125,27 +125,27 @@ public class Controller {
 
 
 
-  /*
+
   public void initialize(int squareWidth, int squareHeight, int columnCount, int rowCount,
 
                          int initialFireCount,  int initialMountainCount, int initialRoadCount, int initialRockCount,
-                         int initialFireFighterCount, int initialCloudCount) {
+                         int initialFireFighterCount, int initialCloudCount,int initialMotorFireFighterCount) {
     grid.setDimensions(columnCount, rowCount, squareWidth, squareHeight);
     this.setModel(new FirefighterBoard(columnCount, rowCount,
                                        initialFireCount, initialMountainCount, initialRoadCount, initialRockCount,
-                                        initialFireFighterCount, initialCloudCount));
+                                        initialFireFighterCount, initialCloudCount,initialMotorFireFighterCount));
     repaintGrid();
   }
 
-   */
 
-  public void initialize(int squareWidth, int squareHeight, int columnCount, int rowCount,
+
+  /*public void initialize(int squareWidth, int squareHeight, int columnCount, int rowCount,
                          int hospitalCount, int initalVaccinatedCount) {
     grid.setDimensions(columnCount, rowCount, squareWidth, squareHeight);
     this.setModel(new VirusFightingBoard(columnCount, rowCount, hospitalCount, initalVaccinatedCount));
     repaintGrid();
   }
-
+*/
   public void oneStepButtonAction() {
     this.pause();
     updateBoard();
