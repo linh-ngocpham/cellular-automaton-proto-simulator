@@ -167,7 +167,7 @@ public class FirefighterBoard implements Board {
     initializeImmovable();
   }
 
-  List<Position> neighbors(Position position) {
+  public List<Position> neighbors(Position position) {
     List<Position> list = new ArrayList<>();
     if (position.row() > 0) list.add(new Position(position.row() - 1, position.column()));
     if (position.column() > 0) list.add(new Position(position.row(), position.column() - 1));
