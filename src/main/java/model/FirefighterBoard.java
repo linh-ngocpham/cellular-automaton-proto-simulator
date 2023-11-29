@@ -6,22 +6,27 @@ import java.util.*;
 
 
 public class FirefighterBoard implements Board {
+  int distance = Integer.MAX_VALUE;
   private final int columnCount;
   private final int rowCount;
   private final int initialFireCount;
-  //private final int initialFirefighterCount;
+  private final int initialFirefighterCount;
+  private final int initialCloudCount;
   private final int initialMountainCount;
   private final int initialRoadCount;
   private final int initialRockCount;
   private List<Movable> movableList;
   private List<Immovable> immovableList;
+
+  private List<Position> combinedlistpositions;
   private int step = 0;
   private final Random randomGenerator = new Random();
 
 
 
   public FirefighterBoard(int columnCount, int rowCount, int initialFireCount,
-                          int initialMountainCount, int initialRoadCount, int initialRockCount) {
+                          int initialMountainCount, int initialRoadCount, int initialRockCount,
+                          int initialFirefighterCount, int initialCloudCount) {
     this.columnCount = columnCount;
     this.rowCount = rowCount;
 
@@ -29,7 +34,8 @@ public class FirefighterBoard implements Board {
     this.immovableList = new ArrayList<>();
 
     this.initialFireCount = initialFireCount;
-    //this.initialFirefighterCount = initialFirefighterCount;
+    this.initialFirefighterCount = initialFirefighterCount;
+    this.initialCloudCount = initialCloudCount;
     this.initialMountainCount = initialMountainCount;
     this.initialRoadCount = initialRoadCount;
     this.initialRockCount = initialRockCount;
@@ -53,6 +59,12 @@ public class FirefighterBoard implements Board {
   public void initializeMovable() {
     for (int i = 0; i < initialFireCount; i++) {
       movableList.add(new Fire(randomEmptyPosition()));
+    }
+    for (int i = 0; i < initialFirefighterCount; i++) {
+      movableList.add(new Firefighter(randomEmptyPosition()));
+    }
+    for (int i = 0; i < initialCloudCount; i++) {
+      movableList.add(new Cloud(randomEmptyPosition()));
     }
   }
 
@@ -154,6 +166,32 @@ public class FirefighterBoard implements Board {
     if (position.row() < rowCount - 1) list.add(new Position(position.row() + 1, position.column()));
     if (position.column() < columnCount - 1) list.add(new Position(position.row(), position.column() + 1));
     return list;
+  }
+
+
+  public void debug(){
+    Position position;
+
+    System.out.println(movableList.toString());
+
+    for (int row = 0; row < rowCount; row++){
+      for (int column = 0; column < columnCount; column++){
+
+        position = new Position(row,column);
+        if (getMovableByPosition(position) == null){
+          System.out.print("0");
+        } else if (getMovableByPosition(position) instanceof Fire) {
+          System.out.print("1 ");
+        } else if (getMovableByPosition(position) instanceof Firefighter) {
+          System.out.print("2");
+        }
+        else if (getMovableByPosition(position) instanceof Cloud) {
+          System.out.print("3");
+        }
+      }
+      System.out.println();
+    }
+    System.out.println();
   }
 
 }

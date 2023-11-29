@@ -27,13 +27,7 @@ public class FirefighterBoardTest {
     }
     assertThat(board.stepNumber()).isEqualTo(10);
   }
-  @Test
-  void testGetState_afterSet(){
-    Board<List<ModelElement>> board = new FirefighterBoard(20, 10, 0, 0);
-    Position position = new Position(1,2);
-    assertThat(board.getState(position)).isEmpty();
-    board.setState(List.of(ModelElement.FIRE), position);
-    assertThat(board.getState(position)).containsExactly(ModelElement.FIRE);
-  }
+
 
 }
+ */

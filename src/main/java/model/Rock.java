@@ -6,7 +6,7 @@ import view.FirefighterGrid;
 
 public class Rock implements Immovable{
     Position position;
-    Color color = Color.MEDIUMTURQUOISE;
+    Color color = Color.SADDLEBROWN;
     public Rock(Position position){
         this.position = position;
     }
@@ -18,7 +18,7 @@ public class Rock implements Immovable{
 
     @Override
     public void paint(FirefighterGrid grid) {
-        grid.paintSquare(position.row(), position.column(), color);
+        grid.paintCircle(position.row(), position.column(), color);
 
     }
 }

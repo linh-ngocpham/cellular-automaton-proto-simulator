@@ -11,11 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.util.Duration;
-import javafx.util.Pair;
 import model.Board;
-import model.ModelElement;
 import model.FirefighterBoard;
 import model.Movable;
+import modelVirus.VirusFightingBoard;
 import util.Position;
 import view.Grid;
 import view.ViewElement;
@@ -41,7 +40,7 @@ public class Controller {
   @FXML
   private Grid grid;
   private Timeline timeline;
-  private Board<List<ModelElement>> board;
+  private Board board;
 
   @FXML
   private void initialize() {
@@ -55,8 +54,15 @@ public class Controller {
     pauseToggleButton.setSelected(true);
   }
 
+  /*
   private void setModel(FirefighterBoard firefighterBoard) {
     this.board = requireNonNull(firefighterBoard, "firefighter.model is null");
+  }
+
+   */
+
+  private void setModel(VirusFightingBoard firefighterBoard) {
+    this.board = requireNonNull(firefighterBoard, "virusfighting.model is null");
   }
 
   private void updateBoard(){
@@ -73,6 +79,8 @@ public class Controller {
     }
     grid.repaint(updatedSquares, updatedClearSquares, board);
     updateGenerationLabel(board.stepNumber());
+
+    board.debug();
   }
 
   private void repaintGrid(){
@@ -81,15 +89,7 @@ public class Controller {
   }
 
 
-  private ViewElement getViewElement(List<ModelElement> squareState) {
-    if(squareState.contains(ModelElement.FIREFIGHTER)){
-      return ViewElement.FIREFIGHTER;
-    }
-    if (squareState.contains(ModelElement.FIRE)){
-      return ViewElement.FIRE;
-    }
-    return ViewElement.EMPTY;
-  }
+
 
   private void initializeTimeline() {
     Duration duration = new Duration(Controller.PERIOD_IN_MILLISECONDS);
@@ -125,10 +125,24 @@ public class Controller {
 
 
 
-  public void initialize(int squareWidth, int squareHeight, int columnCount,
-                                int rowCount, int initialFireCount,  int initialMountainCount, int initialRoadCount, int initialRockCount) {
+  /*
+  public void initialize(int squareWidth, int squareHeight, int columnCount, int rowCount,
+
+                         int initialFireCount,  int initialMountainCount, int initialRoadCount, int initialRockCount,
+                         int initialFireFighterCount, int initialCloudCount) {
     grid.setDimensions(columnCount, rowCount, squareWidth, squareHeight);
-    this.setModel(new FirefighterBoard(columnCount, rowCount, initialFireCount, initialMountainCount, initialRoadCount, initialRockCount));
+    this.setModel(new FirefighterBoard(columnCount, rowCount,
+                                       initialFireCount, initialMountainCount, initialRoadCount, initialRockCount,
+                                        initialFireFighterCount, initialCloudCount));
+    repaintGrid();
+  }
+
+   */
+
+  public void initialize(int squareWidth, int squareHeight, int columnCount, int rowCount,
+                         int hospitalCount, int initalVaccinatedCount) {
+    grid.setDimensions(columnCount, rowCount, squareWidth, squareHeight);
+    this.setModel(new VirusFightingBoard(columnCount, rowCount, hospitalCount, initalVaccinatedCount));
     repaintGrid();
   }
 

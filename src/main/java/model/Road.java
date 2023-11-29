@@ -17,7 +17,7 @@ public class Road implements Immovable{
 
     @Override
     public void paint(FirefighterGrid grid) {
-        grid.paintSquare(position.row(), position.column(), color);
+        grid.paintCircle(position.row(), position.column(), color);
 
     }
 }

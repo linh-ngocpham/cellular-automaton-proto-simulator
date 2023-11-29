@@ -48,9 +48,7 @@ public interface Board<S> {
   int stepNumber();
 
   Immovable getImmovableByPosition(Position position);
-
-
   Movable getMovableByPosition(Position position);
-
   List<Movable> movableList();
+  void debug();
 }

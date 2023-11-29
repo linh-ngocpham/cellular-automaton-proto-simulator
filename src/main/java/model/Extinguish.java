@@ -14,7 +14,7 @@ public abstract class Extinguish {
      */
 
         public Position position;
-        private Color color;
+        Color color;
 
         public Extinguish(Position position){
             this.position = position;
