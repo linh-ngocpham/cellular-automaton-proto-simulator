@@ -1,4 +1,5 @@
 Tache 1 :
+
    MOVABLE:::
         Fire           ----  Red   SQUARE  
         FireFighter    ----  Blue  SQUARE
@@ -10,6 +11,7 @@ Tache 1 :
         Road           ----  Black CIRCLE 
 
 Tache 2 :
+
      MOVABLE:::
         Virus          ---- Red CIRCLE
         Doctor         ---- Blue CIRCLE 
