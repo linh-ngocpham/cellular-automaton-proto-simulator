@@ -1,4 +1,4 @@
-
+In this project me and my friend - kokiMaina trying to change a non-respected SOLID principle programming into a respected SOLID principle programming.
 
 
     Tache 1 : MOVABLE:::
